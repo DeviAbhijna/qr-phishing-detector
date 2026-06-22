@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Security Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+
+<body class="container mt-5">
+
+    <h1>QR Scan Analytics Dashboard</h1>
+
+    <div class="card p-4">
+        <h4>Total Scans: {{ total }}</h4>
+        <h4>Safe URLs: {{ safe }}</h4>
+        <h4>Suspicious URLs: {{ suspicious }}</h4>
+        <h4>Phishing URLs: {{ phishing }}</h4>
+    </div>
+
+    <div class="mt-4">
+        <canvas id="chart"></canvas>
+    </div>
+
+    
+<hr>
+
+<h3>Recent Scan History</h3>
+
+<table class="table table-bordered table-striped">
+
+    <thead class="table-dark">
+        <tr>
+            <th>Date & Time</th>
+            <th>URL</th>
+            <th>Result</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for scan in scans %}
+    <tr>
+        <td>{{ scan[0] }}</td>
+        <td>{{ scan[1] }}</td>
+        <td>{{ scan[2] }}</td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+<script>
+
+    const safeCount = Number("{{ safe }}");
+    const suspiciousCount = Number("{{ suspicious }}");
+    const phishingCount = Number("{{ phishing }}");
+
+    new Chart(document.getElementById("chart"), {
+        type: "pie",
+        data: {
+            labels: ["Safe", "Suspicious", "Phishing"],
+            datasets: [{
+                data: [
+                    safeCount,
+                    suspiciousCount,
+                    phishingCount
+                ]
+            }]
+        }
+    });
+
+</script>
+
+
+</body>
+</html>
